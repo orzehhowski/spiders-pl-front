@@ -9,9 +9,9 @@ export default {
     isFamily: Boolean,
   },
   computed: {
-    apiLink() {
-      const type = this.isFamily ? "/family" : "/spider";
-      return `${this.$API_URL}/${type}/${this.data.id}`;
+    familyLink() {
+      const type = this.isFamily ? "family" : "spider";
+      return `/${type}/${this.data.id}`;
     },
     imageSrc() {
       let src;
@@ -34,7 +34,7 @@ export default {
 </script>
 
 <template>
-  <RouterLink :to="apiLink" class="spider-card-link text-dark">
+  <RouterLink :to="familyLink" class="spider-card-link text-dark">
     <div class="card spider-card my-2">
       <img
         :src="imageSrc"

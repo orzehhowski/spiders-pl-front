@@ -12,8 +12,12 @@ const router = createRouter({
     {
       path: "/search/:searchData",
       name: "search",
-      props: true,
       component: () => import("../views/SearchView.vue"),
+    },
+    {
+      path: "/family/:id",
+      name: "family",
+      component: () => import("../views/FamilyView.vue"),
     },
   ],
 });
