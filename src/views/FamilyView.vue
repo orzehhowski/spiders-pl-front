@@ -2,12 +2,16 @@
 import SpidersList from "../components/SpidersList.vue";
 import SpiderDescription from "../components/SpiderDescription.vue";
 import ResourcesList from "../components/ResourcesList.vue";
+import ErrorMessage from "../components/ErrorMessage.vue";
+import LoadingMessage from "../components/LoadingMessage.vue";
 
 export default {
   components: {
     SpidersList,
     SpiderDescription,
     ResourcesList,
+    ErrorMessage,
+    LoadingMessage,
   },
   data() {
     return {
@@ -17,23 +21,34 @@ export default {
       resources: Array,
       polishName: String,
       latinName: { type: String, required: true },
+      resStatus: null,
+      message: null,
     };
   },
   async mounted() {
-    let res = await fetch(`${this.$API_URL}/family/${this.$route.params.id}`);
-    res = await res.json();
-    this.spiders = res.spiders;
-    this.polishName = res.name;
-    this.latinName = res.latinName;
-    this.appearanceDesc = res.appearanceDesc;
-    this.behaviorDesc = res.behaviorDesc;
-    this.resources = res.resources;
+    try {
+      const res = await fetch(
+        `${this.$API_URL}/family/${this.$route.params.id}`
+      );
+      const resJson = await res.json();
+
+      this.message = resJson.message;
+      this.spiders = resJson.spiders;
+      this.polishName = resJson.name;
+      this.latinName = resJson.latinName;
+      this.appearanceDesc = resJson.appearanceDesc;
+      this.behaviorDesc = resJson.behaviorDesc;
+      this.resources = resJson.resources;
+      this.resStatus = res.status;
+    } catch {
+      this.resStatus = 500;
+    }
   },
 };
 </script>
 
 <template>
-  <main v-if="latinName" class="container">
+  <main v-if="resStatus === 200" class="container">
     <h1 :class="`mt-3` + (polishName ? `` : ` italic`)">
       {{ polishName || latinName }}
     </h1>
@@ -44,7 +59,7 @@ export default {
     <SpiderDescription :desc="behaviorDesc" title="Tryb życia" />
     <ResourcesList :resources="resources" />
   </main>
-  <main v-else>
-    <h1>Ładowanie...</h1>
-  </main>
+
+  <ErrorMessage v-else-if="resStatus" :status="resStatus" :message="message" />
+  <LoadingMessage v-else />
 </template>
