@@ -1,21 +1,21 @@
 <script>
-import SpidersList from "../components/SpidersList.vue";
 import SpiderDescription from "../components/SpiderDescription.vue";
 import ResourcesList from "../components/ResourcesList.vue";
 import ErrorMessage from "../components/ErrorMessage.vue";
 import LoadingMessage from "../components/LoadingMessage.vue";
+import BsCarousel from "../components/BsCarousel.vue";
 
 export default {
   components: {
-    SpidersList,
     SpiderDescription,
     ResourcesList,
     ErrorMessage,
     LoadingMessage,
+    BsCarousel,
   },
   data() {
     return {
-      spiders: Array,
+      images: Array,
       appearanceDesc: String,
       behaviorDesc: String,
       resources: Array,
@@ -28,12 +28,12 @@ export default {
   async mounted() {
     try {
       const res = await fetch(
-        `${this.$API_URL}/family/${this.$route.params.id}`
+        `${this.$API_URL}/spider/${this.$route.params.id}`
       );
       const resJson = await res.json();
 
       this.message = resJson.message;
-      this.spiders = resJson.spiders;
+      this.images = resJson.images;
       this.polishName = resJson.name;
       this.latinName = resJson.latinName;
       this.appearanceDesc = resJson.appearanceDesc;
@@ -54,7 +54,7 @@ export default {
     </h1>
     <h2 v-if="polishName" class="italic">{{ latinName }}</h2>
     <hr />
-    <SpidersList v-if="spiders" :list="spiders" />
+    <BsCarousel :images="images" />
     <SpiderDescription :desc="appearanceDesc" title="Wygląd" />
     <SpiderDescription :desc="behaviorDesc" title="Tryb życia" />
     <ResourcesList :resources="resources" />

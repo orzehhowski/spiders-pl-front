@@ -20,6 +20,11 @@ const router = createRouter({
       name: "family",
       component: () => import("../views/FamilyView.vue"),
     },
+    {
+      path: "/spider/:id",
+      name: "spider",
+      component: () => import("../views/SpiderView.vue"),
+    },
     { path: "/:pathMatch(.*)*", name: "NotFound", component: NotFoundView },
   ],
 });
