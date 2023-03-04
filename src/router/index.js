@@ -25,6 +25,11 @@ const router = createRouter({
       name: "spider",
       component: () => import("../views/SpiderView.vue"),
     },
+    {
+      path: "/login",
+      name: "login",
+      component: () => import("../views/LoginView.vue"),
+    },
     { path: "/:pathMatch(.*)*", name: "NotFound", component: NotFoundView },
   ],
 });

@@ -1,6 +1,14 @@
 <script>
 import { RouterLink } from "vue-router";
 export default {
+  props: {
+    loginHandler: Function,
+    logoutHandler: Function,
+    isAuth: Boolean,
+    isAdmin: Boolean,
+    token: String,
+    userId: Number,
+  },
   components: {
     RouterLink,
   },
@@ -36,11 +44,20 @@ export default {
           </li>
         </ul>
         <ul class="navbar-nav ml-3 mb-2 mb-lg-0">
-          <li class="nav-item">
-            <RouterLink to="/login" class="nav-link">Zaloguj</RouterLink>
+          <li v-if="!isAuth" class="nav-item">
+            <RouterLink
+              to="/login"
+              :loginHandler="loginHandler"
+              class="nav-link"
+              >Zaloguj</RouterLink
+            >
           </li>
-          <li class="nav-item">
+          <li v-if="!isAuth" class="nav-item">
             <RouterLink to="/signup" class="nav-link">Utwórz konto</RouterLink>
+          </li>
+
+          <li v-else class="nav-item">
+            <a class="nav-link" @click="logoutHandler">Wyloguj</a>
           </li>
           <li>
             <form class="d-flex search-form">
@@ -67,5 +84,9 @@ export default {
 <style>
 input {
   max-width: 500px;
+}
+
+a {
+  cursor: pointer;
 }
 </style>
