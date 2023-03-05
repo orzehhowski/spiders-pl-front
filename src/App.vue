@@ -1,12 +1,18 @@
 <script setup>
 import { RouterView } from "vue-router";
 import TheNavbar from "./components/TheNavbar.vue";
+import MessageAlert from "./components/MessageAlert.vue";
 </script>
 
 <script>
 export default {
+  components: {
+    TheNavbar,
+    MessageAlert,
+  },
   data() {
     return {
+      messages: [],
       isAuth: false,
       isAdmin: false,
       userId: null,
@@ -20,10 +26,20 @@ export default {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
       });
+      const resBody = await res.json();
       if (res.status !== 200) {
-        //error
+        if (res.status === 401) {
+          this.messages.push({
+            message: "Błędny email lub hasło.",
+            type: "danger",
+          });
+        } else {
+          this.messages.push({
+            message: "Wystąpił błąd. Spróbuj ponownie później.",
+            type: "danger",
+          });
+        }
       } else {
-        const resBody = await res.json();
         this.isAuth = true;
         this.isAdmin = resBody.isAdmin;
         this.userId = resBody.userId;
@@ -35,8 +51,43 @@ export default {
         const remainingMs = 12 * 60 * 60 * 1000;
         const expiryDate = new Date(new Date().getTime() + remainingMs);
         localStorage.setItem("expiryDate", expiryDate.toISOString());
+        location.replace("/");
       }
-      location.replace("/");
+    },
+
+    async signup(email, password, username) {
+      const res = await fetch(`${this.$API_URL}/auth/signup`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password, username: username || null }),
+      });
+      const resBody = res.json();
+      if (res.status !== 201) {
+        this.messages.push({
+          message: "cos jest zle, domysl sie frajerze",
+          type: "danger",
+        });
+      } else {
+        this.isAuth = true;
+        this.userId = resBody.userId;
+        this.token = resBody.token;
+        localStorage.setItem("token", resBody.token);
+        localStorage.setItem("isAuth", true);
+        localStorage.setItem("userId", resBody.userId);
+        const remainingMs = 12 * 60 * 60 * 1000;
+        const expiryDate = new Date(new Date().getTime() + remainingMs);
+        localStorage.setItem("expiryDate", expiryDate.toISOString());
+        localStorage.setItem(
+          "message",
+          JSON.stringify({
+            type: "success",
+            message: `Witaj${
+              username ? ", " + username : ""
+            }! Dziękujemy za dołączenie do społeczności.`,
+          })
+        );
+        location.replace("/");
+      }
     },
 
     logout() {
@@ -49,7 +100,6 @@ export default {
       localStorage.removeItem("isAdmin");
       localStorage.removeItem("userId");
       localStorage.removeItem("expiryDate");
-      location.replace("/");
     },
   },
   mounted() {
@@ -67,6 +117,13 @@ export default {
     this.isAdmin = !!localStorage.getItem("isAdmin");
     this.token = token;
   },
+  watch: {
+    $route() {
+      const savedMess = localStorage.getItem("message");
+      localStorage.removeItem("message");
+      this.messages = savedMess ? [JSON.parse(savedMess)] : [];
+    },
+  },
 };
 </script>
 
@@ -76,9 +133,9 @@ export default {
     :isAdmin="isAdmin"
     :userId="userId"
     :token="token"
-    :loginHandler="login"
     :logoutHandler="logout"
   />
+  <MessageAlert :messages="messages" />
   <RouterView
     :isAuth="isAuth"
     :isAdmin="isAdmin"
@@ -86,6 +143,7 @@ export default {
     :token="token"
     :loginHandler="login"
     :logoutHandler="logout"
+    :signupHandler="signup"
   />
 </template>
 

@@ -11,7 +11,7 @@ export default {
   },
   data() {
     return {
-      families: Array,
+      families: [],
       message: null,
       resStatus: null,
     };

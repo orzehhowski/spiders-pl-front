@@ -1,19 +1,20 @@
 <script>
 export default {
   props: {
-    loginHandler: Function,
+    signupHandler: Function,
   },
   data() {
     return {
       email: "",
       password: "",
+      username: "",
       blockSubmit: true,
     };
   },
   methods: {
     onSubmit(ev) {
       ev.preventDefault();
-      this.loginHandler(this.email, this.password);
+      this.signupHandler(this.email, this.password, this.username);
     },
   },
   watch: {
@@ -41,8 +42,18 @@ export default {
 
 <template>
   <main class="container">
-    <h1 class="mt-3">Zaloguj się</h1>
+    <h1 class="mt-3">Utwórz konto</h1>
     <form @submit="onSubmit">
+      <div class="mb-3">
+        <label for="username" class="form-label">Nazwa użytkownika</label>
+        <input
+          v-model="username"
+          type="text"
+          maxlength="32"
+          name="username"
+          class="form-control"
+        />
+      </div>
       <div class="mb-3">
         <label for="email" class="form-label">E-mail</label>
         <input v-model="email" type="email" name="email" class="form-control" />
