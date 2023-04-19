@@ -16,7 +16,7 @@ export default {
     imageSrc() {
       let src;
       if (this.isFamily) {
-        src = this.data.image;
+        src = this.data.image.src;
       } else {
         src = this.data.images[0].src;
       }

@@ -156,7 +156,7 @@ hr.small {
   width: 40%;
 }
 
-.resources {
+.sources {
   overflow-x: hidden;
 }
 

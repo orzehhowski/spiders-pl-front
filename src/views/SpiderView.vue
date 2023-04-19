@@ -1,6 +1,6 @@
 <script>
 import SpiderDescription from "../components/SpiderDescription.vue";
-import ResourcesList from "../components/ResourcesList.vue";
+import SourcesList from "../components/SourcesList.vue";
 import ErrorMessage from "../components/ErrorMessage.vue";
 import LoadingMessage from "../components/LoadingMessage.vue";
 import BsCarousel from "../components/BsCarousel.vue";
@@ -8,7 +8,7 @@ import BsCarousel from "../components/BsCarousel.vue";
 export default {
   components: {
     SpiderDescription,
-    ResourcesList,
+    SourcesList,
     ErrorMessage,
     LoadingMessage,
     BsCarousel,
@@ -18,7 +18,7 @@ export default {
       images: Array,
       appearanceDesc: String,
       behaviorDesc: String,
-      resources: Array,
+      sources: Array,
       polishName: String,
       latinName: String,
       resStatus: null,
@@ -38,7 +38,7 @@ export default {
       this.latinName = resJson.latinName;
       this.appearanceDesc = resJson.appearanceDesc;
       this.behaviorDesc = resJson.behaviorDesc;
-      this.resources = resJson.resources;
+      this.sources = resJson.sources;
       this.resStatus = res.status;
     } catch {
       this.resStatus = 500;
@@ -57,7 +57,7 @@ export default {
     <BsCarousel :images="images" />
     <SpiderDescription :desc="appearanceDesc" title="Wygląd" />
     <SpiderDescription :desc="behaviorDesc" title="Tryb życia" />
-    <ResourcesList :resources="resources" />
+    <SourcesList :sources="sources" />
   </main>
 
   <ErrorMessage v-else-if="resStatus" :status="resStatus" :message="message" />
