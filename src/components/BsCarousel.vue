@@ -7,7 +7,7 @@ export default {
 </script>
 
 <template>
-  <h5>Galeria</h5>
+  <h4>Galeria</h4>
   <div id="galleryCarousel" class="carousel slide">
     <div class="carousel-indicators">
       <button

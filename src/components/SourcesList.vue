@@ -8,7 +8,7 @@ export default {
 
 <template>
   <div v-if="sources.length > 0">
-    <h5>Źródła zewnętrzne</h5>
+    <h4>Źródła zewnętrzne</h4>
     <hr class="small" />
     <div class="mb-4">
       <p v-for="(source, index) in sources" :key="index" class="sources">
