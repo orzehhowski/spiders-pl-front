@@ -15,6 +15,7 @@ export default {
   },
   data() {
     return {
+      id: Number,
       spiders: Array,
       appearanceDesc: String,
       behaviorDesc: String,
@@ -33,6 +34,7 @@ export default {
       const resJson = await res.json();
 
       this.message = resJson.message;
+      this.id = resJson.id;
       this.spiders = resJson.spiders;
       this.polishName = resJson.name;
       this.latinName = resJson.latinName;
@@ -55,8 +57,18 @@ export default {
     <h2 v-if="polishName" class="italic">{{ latinName }}</h2>
     <hr />
     <SpidersList v-if="spiders" :list="spiders" />
-    <SpiderDescription :desc="appearanceDesc" title="Wygląd" />
-    <SpiderDescription :desc="behaviorDesc" title="Tryb życia" />
+    <SpiderDescription
+      :desc="appearanceDesc"
+      :isFamily="true"
+      :id="id"
+      title="Wygląd"
+    />
+    <SpiderDescription
+      :desc="behaviorDesc"
+      :isFamily="true"
+      :id="id"
+      title="Tryb życia"
+    />
     <SourcesList :sources="sources" />
   </main>
 

@@ -21,6 +21,12 @@ export default {
     };
   },
   methods: {
+    readMessageFromStorage() {
+      const savedMess = localStorage.getItem("message");
+      localStorage.removeItem("message");
+      this.messages = savedMess ? [JSON.parse(savedMess)] : [];
+    },
+
     async login(email, password) {
       const res = await fetch(`${this.$API_URL}/auth/login`, {
         method: "POST",
@@ -105,6 +111,7 @@ export default {
       localStorage.removeItem("userId");
       localStorage.removeItem("isOwner");
       localStorage.removeItem("expiryDate");
+      location.replace("/");
     },
   },
   mounted() {
@@ -117,17 +124,13 @@ export default {
       this.logout();
       return;
     }
-    this.userId = localStorage.getItem("userId");
+    this.userId = +localStorage.getItem("userId");
     this.isAuth = !!localStorage.getItem("isAuth");
     this.isAdmin = !!localStorage.getItem("isAdmin");
     this.token = token;
   },
-  watch: {
-    $route() {
-      const savedMess = localStorage.getItem("message");
-      localStorage.removeItem("message");
-      this.messages = savedMess ? [JSON.parse(savedMess)] : [];
-    },
+  created() {
+    this.readMessageFromStorage();
   },
 };
 </script>
@@ -157,12 +160,31 @@ export default {
   font-style: italic;
 }
 
+.hidden {
+  display: none;
+}
+
 hr.small {
-  width: 40%;
+  max-width: 36rem;
+}
+
+.desc-title-container {
+  max-width: 36rem;
+  display: flex;
+  justify-content: space-between;
 }
 
 .sources {
   overflow-x: hidden;
+}
+
+.edit-icon {
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+.edit-icon.disabled {
+  color: gray;
 }
 
 .carousel {

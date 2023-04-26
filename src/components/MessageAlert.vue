@@ -3,18 +3,27 @@ export default {
   props: {
     messages: Array,
   },
+  methods: {
+    closeAlert(index) {
+      this.$refs.alerts[index].classList.add("hidden");
+    },
+  },
 };
 </script>
 
 <template>
   <div class="container">
     <div
+      ref="alerts"
       v-for="(message, index) in messages"
-      :class="`alert alert-${message.type} my-3`"
+      :class="`alert alert-${message.type} mt-3 p-3`"
       :key="index"
       role="alert"
     >
-      {{ message.message }}
+      <p class="my-auto">
+        {{ message.message }}
+      </p>
+      <i class="close-icon fa-solid fa-xmark" @click="closeAlert(index)"></i>
     </div>
   </div>
 </template>
@@ -23,9 +32,17 @@ export default {
 .alert {
   padding: 0.9rem;
 }
+.close-icon {
+  font-size: 1.2rem;
+  margin: auto 0;
+  padding: 4px;
+  cursor: pointer;
+}
 @media only screen and (min-width: 768px) {
   .alert {
-    width: 50%;
+    max-width: 36rem;
+    display: flex;
+    justify-content: space-between;
   }
 }
 </style>
