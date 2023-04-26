@@ -15,6 +15,7 @@ export default {
       messages: [],
       isAuth: false,
       isAdmin: false,
+      isOwner: false,
       userId: null,
       token: null,
     };
@@ -42,12 +43,14 @@ export default {
       } else {
         this.isAuth = true;
         this.isAdmin = resBody.isAdmin;
+        this.isOwner = resBody.isOwner;
         this.userId = resBody.userId;
         this.token = resBody.token;
         localStorage.setItem("token", resBody.token);
         localStorage.setItem("isAdmin", resBody.isAdmin);
         localStorage.setItem("isAuth", true);
         localStorage.setItem("userId", resBody.userId);
+        localStorage.setItem("isOwner", resBody.isOwner);
         const remainingMs = 12 * 60 * 60 * 1000;
         const expiryDate = new Date(new Date().getTime() + remainingMs);
         localStorage.setItem("expiryDate", expiryDate.toISOString());
@@ -93,12 +96,14 @@ export default {
     logout() {
       this.isAuth = false;
       this.isAdmin = false;
+      this.isOwner = false;
       this.userId = null;
       this.token = null;
       localStorage.removeItem("token");
       localStorage.removeItem("isAuth");
       localStorage.removeItem("isAdmin");
       localStorage.removeItem("userId");
+      localStorage.removeItem("isOwner");
       localStorage.removeItem("expiryDate");
     },
   },
